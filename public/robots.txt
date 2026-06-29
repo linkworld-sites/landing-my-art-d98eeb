@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://8b7b3ef4.run.linkworld.ai/sitemap.xml
