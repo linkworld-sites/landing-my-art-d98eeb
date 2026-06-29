@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
+import { track } from "@/lib/funnel";
 
 const steps = [
   {
@@ -96,6 +97,7 @@ export function CommissionFlow() {
             href="#contact"
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
+            onClick={() => track("intent")}
             className="ghost-btn inline-block"
           >
             <span>Jetzt anfragen →</span>

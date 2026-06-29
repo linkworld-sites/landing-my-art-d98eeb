@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import { useRef, useState } from "react";
+import { motion, useInView, useReducedMotion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
 const pieces = [
@@ -59,6 +59,7 @@ function GalleryCard({
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
   const reduced = useReducedMotion();
+  const [hovered, setHovered] = useState(false);
 
   return (
     <motion.div
@@ -70,7 +71,9 @@ function GalleryCard({
         duration: 0.8,
         ease: [0.22, 1, 0.36, 1],
       }}
-      className="break-inside-avoid mb-4 relative group overflow-hidden cursor-pointer"
+      className="break-inside-avoid mb-4 relative overflow-hidden cursor-pointer"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
       <div
         className={`relative w-full overflow-hidden ${
@@ -81,25 +84,37 @@ function GalleryCard({
           src={piece.src}
           alt={piece.name}
           fill
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+          className={`object-cover transition-transform duration-700 ease-out ${hovered ? "scale-[1.04]" : "scale-100"}`}
           sizes="(max-width: 768px) 100vw, 33vw"
         />
-        {/* Hover overlay */}
-        <motion.div
-          initial={{ y: "101%" }}
-          whileHover={{ y: "0%" }}
-          transition={{ duration: 0.35, ease: "easeOut" }}
-          className="absolute inset-0 bg-shadow/85 flex flex-col justify-end p-5"
-        >
-          <p className="font-display text-lg italic text-canvas">{piece.name}</p>
-          <span
-            className={`mt-2 self-start px-2 py-0.5 text-xs tracking-widest uppercase ${
-              statusColor[piece.status]
-            }`}
-          >
-            {piece.status}
-          </span>
-        </motion.div>
+        {/* Hover overlay — slides up from bottom, triggered by parent hover state */}
+        <AnimatePresence>
+          {!reduced && (
+            <motion.div
+              initial={{ y: "101%" }}
+              animate={hovered ? { y: "0%" } : { y: "101%" }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
+              className="absolute inset-0 bg-shadow/85 flex flex-col justify-end p-5"
+            >
+              <p className="font-display text-lg italic text-canvas">{piece.name}</p>
+              <span
+                className={`mt-2 self-start px-2 py-0.5 text-xs tracking-widest uppercase ${
+                  statusColor[piece.status]
+                }`}
+              >
+                {piece.status}
+              </span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        {/* Always-visible status badge for reduced motion */}
+        {reduced && (
+          <div className="absolute bottom-3 left-3">
+            <span className={`px-2 py-0.5 text-xs tracking-widest uppercase ${statusColor[piece.status]}`}>
+              {piece.status}
+            </span>
+          </div>
+        )}
       </div>
     </motion.div>
   );

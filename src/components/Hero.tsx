@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import { track } from "@/lib/funnel";
 
@@ -24,13 +24,21 @@ function AnimatedChar({ char, delay }: { char: string; delay: number }) {
 
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
+  const reduced = useReducedMotion();
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+
+  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", reduced ? "0%" : "15%"]);
 
   const lines = headline.split("\n");
 
   return (
     <section ref={ref} className="relative min-h-screen overflow-hidden">
-      {/* Background image */}
-      <div className="absolute inset-0">
+      {/* Background image with parallax */}
+      <motion.div className="absolute inset-0" style={{ y: imageY }}>
         <Image
           src="/images/hero.png"
           alt="Handbemalte Denim-Jacke, Kunstwerk im Entstehen"
@@ -41,7 +49,7 @@ export function Hero() {
         <div className="absolute inset-0 bg-denim/65" />
         {/* Vignette bottom */}
         <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-denim to-transparent" />
-      </div>
+      </motion.div>
 
       {/* Content — top-left positioned */}
       <div className="relative z-10 flex flex-col justify-between min-h-screen px-6 md:px-16 py-32 max-w-7xl">
