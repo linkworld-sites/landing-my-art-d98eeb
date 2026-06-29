@@ -21,7 +21,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "My Art — Bespoke Painted Denim",
   description:
-    "Deine Jeans. Meine Kunst. Ein Unikat. Handbemalte Denim-Stücke — kein Algorithmus, kein Print-on-Demand, nur Farbe, Stoff und Handarbeit.",
+    "My Art hand-paints bespoke, machine-washable acrylic portraits onto denim jackets. 500+ commissions. 4.9-star rating. Start your custom jacket today.",
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

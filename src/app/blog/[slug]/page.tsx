@@ -20,6 +20,9 @@ export async function generateMetadata({
   return {
     title: `${post.title} | My Art`,
     description: post.description,
+    alternates: {
+      canonical: `https://8b7b3ef4.run.linkworld.ai/blog/${slug}`,
+    },
     openGraph: {
       title: post.title,
       description: post.description,

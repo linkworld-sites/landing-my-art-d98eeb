@@ -5,7 +5,11 @@ import { Footer } from "@/components/Footer";
 
 export const metadata = {
   title: "Journal — My Art",
-  description: "Einblicke ins Atelier, Geschichten hinter den Stücken, und die Kunst des handbemalten Denims.",
+  description:
+    "Explore the My Art journal — stories, process insights, and inspiration behind every hand-painted denim commission.",
+  alternates: {
+    canonical: "https://8b7b3ef4.run.linkworld.ai/blog",
+  },
 };
 
 export default function BlogIndex() {
